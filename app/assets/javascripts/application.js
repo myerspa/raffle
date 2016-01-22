@@ -111,6 +111,10 @@ function Raffler(selector) {
       $(".winner-mask").remove();
       $this.fireworks.stop();
     });
+    $(".winner-mask").click(function(e) {
+      e.preventDefault();
+      $this.fireworks.launch();
+    });
   }
 
   this.determineEntries = function() {
