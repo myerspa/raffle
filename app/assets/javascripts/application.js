@@ -161,7 +161,7 @@ function Fireworks() {
   this.context = $this.canvas.getContext('2d');
   this.particles = [];
   this.rockets = [];
-  this.MAX_PARTICLES = 400;
+  this.MAX_PARTICLES = 1000;
   this.colorCode = 0;
   this.launchInterval = 0;
   this.loopInterval = 0;
@@ -205,7 +205,7 @@ function Fireworks() {
       rocket.vel.x = Math.random() * 6 - 3;
       rocket.size = 8;
       rocket.shrink = 0.999;
-      rocket.gravity = 0.01;
+      rocket.gravity = 0.02;
       $this.rockets.push(rocket);
     }
   }
@@ -230,18 +230,12 @@ function Fireworks() {
           $this.rockets[i].update();
           $this.rockets[i].render($this.context);
 
-          // calculate distance with Pythagoras
+          // distance between mouse and rocket
           var distance = Math.sqrt(Math.pow($this.mousePos.x - $this.rockets[i].pos.x, 2) + Math.pow($this.mousePos.y - $this.rockets[i].pos.y, 2));
-
-          // random chance of 1% if rockets is above the middle
+          // 1% chance of explosion if more than half way up
           var randomChance = $this.rockets[i].pos.y < ($this.SCREEN_HEIGHT * 2 / 3) ? (Math.random() * 100 <= 1) : false;
 
-  /* Explosion rules
-               - 80% of screen
-              - going down
-              - close to the mouse
-              - 1% chance of random explosion
-          */
+          // explode if rocket is in top 5th of screen, the random chance hit, it's close to the mouse, ran out of steam and is moving down now
           if ($this.rockets[i].pos.y < $this.SCREEN_HEIGHT / 5 || $this.rockets[i].vel.y >= 0 || distance < 50 || randomChance) {
               $this.rockets[i].explode();
           } else {
@@ -263,9 +257,9 @@ function Fireworks() {
           }
       }
 
-      // update array with existing particles - old particles should be garbage collected
       $this.particles = existingParticles;
 
+      // Keep the # of particles down to help with performance, lolz at setting max particles to 10k
       while ($this.particles.length > $this.MAX_PARTICLES) {
           $this.particles.shift();
       }
@@ -284,7 +278,7 @@ function Fireworks() {
       this.size = 2;
 
       this.resistance = 1;
-      this.gravity = 0;
+      this.gravity = 0.05;
 
       this.flick = false;
 
@@ -356,7 +350,7 @@ function Fireworks() {
   Rocket.prototype.constructor = Rocket;
 
   Rocket.prototype.explode = function() {
-      var count = Math.random() * 10 + 80;
+      var count = Math.random() * 100 + 100;
 
       for (var i = 0; i < count; i++) {
           var particle = new Particle(this.pos);
@@ -370,7 +364,7 @@ function Fireworks() {
 
           particle.size = 10;
 
-          particle.gravity = 0.2;
+          particle.gravity = 0.1;
           particle.resistance = 0.92;
           particle.shrink = Math.random() * 0.05 + 0.93;
 
