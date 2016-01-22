@@ -119,7 +119,7 @@ function Raffler(selector) {
 
   this.reset = function() {
     $this.entries = []
-    $elm.val("Entries (one per line)");
+    $elm.val("");
     $this.backToEntries();
   }
 
