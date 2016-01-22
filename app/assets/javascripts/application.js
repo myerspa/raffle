@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.animate-colors-min
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require turbolinks
@@ -83,12 +84,14 @@ function Raffler(selector) {
         var removalIndex = Math.floor(Math.random() * elmArr.length); // Random Index position in the array
         var removed = elmArr.splice(removalIndex, 1); // Splice out a random element using the ri var
         removed.forEach(function(rem) {
-          $(rem).fadeOut("slow", function() {
-            if(elmArr.length <= $this.num_winners) {
-              $this.winners(elmArr);
-            } else {
-              $this.pluck(elmArr);
-            }
+          $(rem).animate({ backgroundColor: "rgba(51, 122, 183, 1)", color: "#FFFFFF" },250, function() {
+            $(rem).fadeOut("slow", function() {
+              if(elmArr.length <= $this.num_winners) {
+                $this.winners(elmArr);
+              } else {
+                $this.pluck(elmArr);
+              }
+            });
           });
         });
       }, $this.timeout);
