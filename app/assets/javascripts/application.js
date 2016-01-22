@@ -18,12 +18,19 @@
 function Raffler(selector) {
   $elm = $(selector);
   this.entries = [];
+  this.timeout = 1000;
   this.fireworks = new Fireworks();
   var $this = this;
 
   this.runRaffle = function() {
     console.log("Running raffle!");
     $this.determineEntries();
+    var timeout = parseInt($("#removal_time").val());
+    if(isNaN(timeout) || timeout <= 0 || timeout >= 10000) {
+      $this.timeout = 1000;
+    } else {
+      $this.timeout = timeout;
+    }
     console.log("Determined entries!");
     console.log($this.entries);
     $(".entries").fadeOut("slow", function() {
@@ -74,7 +81,7 @@ function Raffler(selector) {
             }
           });
         });
-      }, 1000);
+      }, $this.timeout);
   }
 
   this.winners = function(elmArr) {
@@ -99,7 +106,7 @@ function Raffler(selector) {
   this.reset = function() {
     $this.entries = []
     $elm.val("Entries (one per line)");
-    backToEntries();
+    $this.backToEntries();
   }
 
   this.backToEntries = function() {
