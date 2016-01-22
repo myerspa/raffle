@@ -84,8 +84,6 @@ textarea[name='raffle_inputs'] {
     margin: 0 auto;
     position: relative;
     width: 600px;
-    height: 300px;
-    top: 30%;
     background-color: white;
     border-radius: 10px;
     border: 2px solid black;
@@ -113,6 +111,10 @@ textarea[name='raffle_inputs'] {
 
 .input-values {
   margin-top: -15px;
+}
+
+#num_winners_label {
+  margin-left: 40px;
 }
 
 canvas {

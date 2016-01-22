@@ -19,18 +19,28 @@ function Raffler(selector) {
   $elm = $(selector);
   this.entries = [];
   this.timeout = 1000;
+  this.num_winners = 1;
   this.fireworks = new Fireworks();
   var $this = this;
 
   this.runRaffle = function() {
     console.log("Running raffle!");
     $this.determineEntries();
+
     var timeout = parseInt($("#removal_time").val());
     if(isNaN(timeout) || timeout <= 0 || timeout >= 10000) {
       $this.timeout = 1000;
     } else {
       $this.timeout = timeout;
     }
+
+    var num_winners = parseInt($("#num_winners").val());
+    if(isNaN(num_winners) || num_winners <= 0 || num_winners > 10) {
+      $this.num_winners = 1;
+    } else {
+      $this.num_winners = num_winners;
+    }
+
     console.log("Determined entries!");
     console.log($this.entries);
     $(".entries").fadeOut("slow", function() {
@@ -74,7 +84,7 @@ function Raffler(selector) {
         var removed = elmArr.splice(removalIndex, 1); // Splice out a random element using the ri var
         removed.forEach(function(rem) {
           $(rem).fadeOut("slow", function() {
-            if(elmArr.length <= 3) {
+            if(elmArr.length <= $this.num_winners) {
               $this.winners(elmArr);
             } else {
               $this.pluck(elmArr);
@@ -91,6 +101,7 @@ function Raffler(selector) {
     });
     $(".winners").append("<a href='javascript:void(0);' class='btn btn-primary pull-right close-winners'>Ok</a>");
     $(".winner-mask").fadeIn("slow");
+    $(".winners").css({top: (window.innerHeight / 2) - ($(".winners").height() / 2)+"px"});
     $this.fireworks.begin();
     $(".winners .close-winners").click(function() {
       $(".winner-mask").fadeOut("slow");
@@ -202,7 +213,7 @@ function Fireworks() {
       }
 
       // clear canvas
-      $this.context.fillStyle = "rgba(0, 0, 0, 0.05)";
+      $this.context.fillStyle = "rgba(0, 0, 0, 1)";
       $this.context.fillRect(0, 0, $this.SCREEN_WIDTH, $this.SCREEN_HEIGHT);
 
       var existingRockets = [];
