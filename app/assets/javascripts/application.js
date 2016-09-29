@@ -79,20 +79,39 @@ function Raffler(selector) {
     }, 1000);
   }
 
+  this.removeCard = function(rem, elmArr) {
+    var xPos = $(rem).offset().left - 20;
+    var yPos = $(rem).offset().top - 20;
+    $(rem).css({
+      position: "absolute",
+      top: yPos + "px",
+      left: xPos + "px"
+    });
+    var animatedX = (($(window).width() / 2) - 250) + "px";
+    var animatedY = (($(window).height() / 2) - 100) + "px";
+    $(rem).animate({ borderRadius: "20px", backgroundColor: "rgba(51, 122, 183, 1)", fontSize: "36px", color: "#FFFFFF", width: "500px", height: "200px", left: animatedX, top: animatedY }, 500, function() {
+      $(rem).append($("<div class='phrase-wrap'><h2 class='phrase'><small>" + Phrases.randomPhrase() + "</small></h2></div>"));
+      $(rem).find(".phrase-wrap").fadeIn("fast", function() {
+        setTimeout(function() {
+          $(rem).fadeOut("slow", function() {
+            if(elmArr.length <= $this.num_winners) {
+              $this.winners(elmArr);
+            } else {
+              $this.pluck(elmArr);
+            }
+          });
+        }, 1000);
+      });
+    });
+  }
+
   this.pluck = function(elmArr) {
       window.setTimeout(function() {
         var removalIndex = Math.floor(Math.random() * elmArr.length); // Random Index position in the array
         var removed = elmArr.splice(removalIndex, 1); // Splice out a random element using the ri var
         removed.forEach(function(rem) {
-          $(rem).animate({ backgroundColor: "rgba(51, 122, 183, 1)", color: "#FFFFFF" },250, function() {
-            $(rem).fadeOut("slow", function() {
-              if(elmArr.length <= $this.num_winners) {
-                $this.winners(elmArr);
-              } else {
-                $this.pluck(elmArr);
-              }
-            });
-          });
+          // Remove the card
+          $this.removeCard(rem, elmArr);
         });
       }, $this.timeout);
   }

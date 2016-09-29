@@ -125,3 +125,12 @@ canvas {
   height: 100%;
   z-index: 1;
 }
+
+.phrase-wrap {
+  display: none;
+  h2 small {
+    // color: #D8000C;
+    color: #FFFFFF;
+    font-size: 36px;
+  }
+}
