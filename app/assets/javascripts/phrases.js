@@ -29,6 +29,7 @@ var Phrases = (function() {
     while(entry == lastResult) {
       entry = Math.floor(Math.random() * (max - min)) + min;
     }
+    lastResult = entry;
     return _phrases[entry];
   }
 
