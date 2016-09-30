@@ -33,7 +33,9 @@ var Phrases = (function() {
     "The fat lady has sung.",
     "You blew it!",
     "You have no power here...",
-    "Make like a tree and leaf"
+    "Make like a tree and leaf",
+    "Your watch has ended.",
+    "You get nothing! You Lose! Good day sir!"
   ]
 
   var lastResult = -1;
