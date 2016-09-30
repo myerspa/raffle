@@ -3,7 +3,7 @@ var Phrases = (function() {
   var _phrases = [
     "The tribe has spoken.",
     "You've been evicted from the Big Brother house.",
-    "Your are the weaskest link. Goodbye!",
+    "You are the weaskest link. Goodbye!",
     "Your time's up.",
     "Your tour ends here.",
     "You've been chopped.",
@@ -16,7 +16,23 @@ var Phrases = (function() {
     "Please turn in your apron.",
     "You will not be the next Iron Chef.",
     "Today is not your day.",
-    "No dice."
+    "No dice.",
+    "Nice try.",
+    "Not for you.",
+    "No soup for you.",
+    "Hit the road Jack.",
+    "For you, it's game over.",
+    "Your check is voided; it's time for you to bounce.",
+    "And that means you're out. Auf Wiedersehen.",
+    "This was your final cut.",
+    "In that test, you were no sweet genius.",
+    "You're the low man on the totem pole, any last words?",
+    "You are not America's next top model.",
+    "You are not Canada's Worst Driver.",
+    "You did not get a rose...",
+    "The fat lady has sung.",
+    "You blew it!",
+    "You have no power here..."
   ]
 
   var lastResult = -1;
