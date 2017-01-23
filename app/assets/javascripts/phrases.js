@@ -3,7 +3,7 @@ var Phrases = (function() {
   var _phrases = [
     "The tribe has spoken.",
     "You've been evicted from the Big Brother house.",
-    "You are the weaskest link. Goodbye!",
+    "You are the weakest link. Goodbye!",
     "Your time's up.",
     "Your tour ends here.",
     "You've been chopped.",
