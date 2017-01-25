@@ -64,13 +64,11 @@ var Phrases = (function() {
     })(array);
   }
 
-  var randomGen = null;
+  var randomGen = shuffle(_phrases.slice());
   function randomPhrase() {
-    if(randomGen == null)
-      randomGen = shuffle(_phrases);
     var result = randomGen();
     if(result == -1) {
-      randomGen = shuffle(_phrases);
+      randomGen = shuffle(_phrases.slice());
       result = randomGen();
     }
     return result;

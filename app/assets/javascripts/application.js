@@ -22,6 +22,9 @@ function Raffler(selector) {
   this.timeout = 1000;
   this.num_winners = 1;
   this.fireworks = new Fireworks();
+  this.resetRequested = false;
+  this.startOverRequested = false;
+  this.running = false;
   var $this = this;
 
   this.runRaffle = function() {
@@ -50,6 +53,7 @@ function Raffler(selector) {
   }
 
   this.perform = function() {
+    $this.running = true;
     var container = $(".results .jumbotron .container");
     var startEntry = ""
     var endEntry = "</div>"
@@ -89,23 +93,35 @@ function Raffler(selector) {
     });
     var animatedX = (($(window).width() / 2) - 250) + "px";
     var animatedY = (($(window).height() / 2) - 100) + "px";
-    $(rem).animate({ borderRadius: "20px", backgroundColor: "rgba(51, 122, 183, 1)", fontSize: "36px", color: "#FFFFFF", width: "500px", height: "200px", left: animatedX, top: animatedY }, 500, function() {
-      $(rem).append($("<div class='phrase-wrap'><h2 class='phrase'><small>" + Phrases.randomPhrase() + "</small></h2></div>"));
-      $(rem).find(".phrase-wrap").fadeIn("fast", function() {
-        setTimeout(function() {
-          $(rem).fadeOut("slow", function() {
-            if(elmArr.length <= $this.num_winners) {
-              $this.winners(elmArr);
-            } else {
-              $this.pluck(elmArr);
-            }
-          });
-        }, 1000);
-      });
+    $(rem).animate({ borderRadius: "20px", backgroundColor: "rgba(51, 122, 183, 1)", fontSize: "36px", color: "#FFFFFF", width: "500px", height: "200px", left: animatedX, top: animatedY }, {
+      duration: 500,
+      queue: false,
+      complete: function() {
+        $(rem).append($("<div class='phrase-wrap'><h2 class='phrase'><small>" + Phrases.randomPhrase() + "</small></h2></div>"));
+        $(rem).find(".phrase-wrap").fadeIn("fast", function() {
+          setTimeout(function() {
+            $(rem).fadeOut("slow", function() {
+              if(elmArr.length <= $this.num_winners) {
+                $this.winners(elmArr);
+              } else {
+                $this.pluck(elmArr);
+              }
+            });
+          }, 1000);
+        });
+      }
     });
   }
 
   this.pluck = function(elmArr) {
+      if($this.resetRequested) {
+        $this.reset();
+        return;
+      }
+      if($this.startOverRequested) {
+        $this.backToEntries();
+        return;
+      }
       window.setTimeout(function() {
         var removalIndex = Math.floor(Math.random() * elmArr.length); // Random Index position in the array
         var removed = elmArr.splice(removalIndex, 1); // Splice out a random element using the ri var
@@ -117,6 +133,7 @@ function Raffler(selector) {
   }
 
   this.winners = function(elmArr) {
+    $this.running = false;
     $("body").append("<div class='winner-mask' style='display: none;'><div class='winners'></div></div>")
     elmArr.forEach(function(elm) {
       $(".winners").append($("<div class='winner'>" + $(elm).text() + "</div>"));
@@ -147,10 +164,15 @@ function Raffler(selector) {
   }
 
   this.backToEntries = function() {
+    $this.running = false;
+    $this.resetRequested = false;
+    $this.startOverRequested = false;
     $(".results").fadeOut("slow",function() {
       $(".raffle-entry").remove();
       $(".entries").fadeIn("slow", function() {
-        // WOOOO
+        $(".view-mask").fadeOut("slow", function() {
+          // Woooo
+        });
       });
     });
   }
@@ -162,10 +184,22 @@ $(document).ready(function() {
     raffler.runRaffle();
   });
   $(".back-to-entries").click(function() {
-    raffler.backToEntries();
+    if(!raffler.running)
+      raffler.backToEntries();
+    else {
+      $(".view-mask").fadeIn("slow", function() {
+        raffler.startOverRequested = true;
+      });
+    }
   });
   $(".new-raffle").click(function() {
-    raffler.reset();
+    if(!raffler.running)
+      raffler.reset();
+    else {
+      $(".view-mask").fadeIn("slow", function() {
+        raffler.resetRequested = true;
+      });
+    }
   });
 });
 
