@@ -36,20 +36,44 @@ var Phrases = (function() {
     "Make like a tree and leaf",
     "Your watch has ended.",
     "You get nothing! You Lose! Good day sir!"
-  ]
+  ];
 
-  var lastResult = -1;
-  function randomPhrase() {
-    var min = 0;
-    var max = _phrases.length;
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    var entry = lastResult;
-    while(entry == lastResult) {
-      entry = Math.floor(Math.random() * (max - min)) + min;
+  function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
     }
-    lastResult = entry;
-    return _phrases[entry];
+
+    return (function(arr) {
+      return function() {
+        if(arr.length === 0)
+          return -1;
+        else
+          return arr.shift();
+      };
+    })(array);
+  }
+
+  var randomGen = null;
+  function randomPhrase() {
+    if(randomGen == null)
+      randomGen = shuffle(_phrases);
+    var result = randomGen();
+    if(result == -1) {
+      randomGen = shuffle(_phrases);
+      result = randomGen();
+    }
+    return result;
   }
 
   return {
